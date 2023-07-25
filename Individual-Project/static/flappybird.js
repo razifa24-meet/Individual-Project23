@@ -1,13 +1,13 @@
 
 //board
 let board;
-let boardWidth = 360;
-let boardHeight = 640;
+let boardWidth = 2000;
+let boardHeight = 900;
 let context;
 
 //bird
-let birdWidth = 34; //width/height ratio = 408/228 = 17/12
-let birdHeight = 24;
+let birdWidth = 52; //width/height ratio = 408/228 = 17/12
+let birdHeight = 38;
 let birdX = boardWidth/8;
 let birdY = boardHeight/2;
 let birdImg;
@@ -30,7 +30,7 @@ let topPipeImg;
 let bottomPipeImg;
 
 //physics
-let velocityX = -2; //pipes moving left speed
+let velocityX = -5; //pipes moving left speed
 let velocityY = 0; //bird jump speed
 let gravity = 0.4;
 
