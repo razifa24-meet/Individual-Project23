@@ -1,4 +1,3 @@
-
 //board
 let board;
 let boardWidth = 2000;
@@ -160,6 +159,18 @@ function moveBird(e) {
         }
     }
 }
+
+const sendDataToFlask = (data) => {
+  axios.post('/save_score', { data: data })
+    .then(response => {
+        console.log("RAZI, IT WORKS");
+        console.log(response.data); // The result received from the Flask server
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+};
+
 
 function detectCollision(a, b) {
     return a.x < b.x + b.width &&   //a's top left corner doesn't reach b's top right corner

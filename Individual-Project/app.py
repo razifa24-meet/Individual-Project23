@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask import session as login_session
 import pyrebase
 
@@ -38,6 +38,24 @@ def signin():
     return render_template("signin.html")
 
 
+@app.route('/save_score', methods=['GET','POST'])
+def save_score():
+    result = "GET METHOD"
+    print('got here1')
+    if request.method == 'POST':
+        print('booooooooooooooo')
+        UID = login_session['user']['localId']
+        data = request.json.get('data')
+        score = data['score']
+        print(score)
+        curr = db.child("Users").child(UID).get().val()
+        print(curr)
+        saved_score = curr['max_score']
+        print(saved_score)
+        if score > saved_score:
+            db.child("Users").child(UID).update({"max_score":score})
+    return jsonify({"result": score})
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup(): 
@@ -52,11 +70,12 @@ def signup():
         try:
             login_session['user'] = auth.create_user_with_email_and_password(email, password)
             UID = login_session['user']['localId']
-            user = {"name": full_name, "email": email, "username" : username, "bio" : bio}
+            user = {"name": full_name, "email": email, "username" : username, "bio" : bio, "max_score": 0}
             db.child("Users").child(UID).update(user)
             return redirect(url_for('frive'))
 
-        except:
+        except Exception as e:
+            print(str(e))
             error = "Authentication failed"
 
     return render_template("signup.html")
@@ -74,6 +93,14 @@ def frive():
 
     return render_template("frive.html")
 
+
+
+@app.route('/leaderboard')
+def leaderboard():
+    users = db.child("Users").get().val()
+    users = dict(sorted(users.items(), key=lambda item: item[1].get("max_score", 0), reverse=True))
+    print(users)
+    return render_template('leaderboard.html', users=users)
 
 
 

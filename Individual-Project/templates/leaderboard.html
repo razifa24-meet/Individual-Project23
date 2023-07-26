@@ -1,0 +1,8 @@
+{% if users %}
+	{% for user in users %}
+		<h1>{{users[user]['username']}}</h1>
+		<h2>{{users[user]['max_score']}}
+	{% endfor %}
+{% else %}
+	<h1>No users found</h1>
+{% endif %}
