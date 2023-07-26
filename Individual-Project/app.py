@@ -82,6 +82,7 @@ def signup():
 
 
 
+
 @app.route('/signout')
 def signout():
     auth.current_user = None
